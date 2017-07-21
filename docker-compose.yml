@@ -1,0 +1,56 @@
+version: "2"
+
+services:
+    web:
+        image: nginx:latest
+        restart: always
+        volumes:
+            - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            #- ./conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
+            - ./conf/nginx/drupal.conf:/etc/nginx/conf.d/default.conf
+            - ./conf/nginx/amplify.conf:/etc/nginx/conf.d/amplify.conf
+        volumes_from:
+          - storage-drupal
+        links:
+            - php
+        #work with jwilder/nginx-proxy
+        ports:
+            - "8080:80"
+        environment:
+          - VIRTUAL_HOST=api.qq.yongbuzhixi.com
+    
+    #api-code-app > drupal:fpm > php:7-fpm 只执行一次！！！
+    php:
+        image: drupal:fpm
+        # image: drupal-php7-fpm #给build镜像后的image命名
+        restart: always
+        links:
+          - "db"
+        volumes_from:
+          - storage-drupal
+        volumes:
+          - ./conf/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
+
+    db:
+      image: mariadb:latest
+      # container_name: mysql #Specify a custom container name, rather than a generated default name.
+      restart: always
+      volumes:
+        - ./sql:/sql
+        - /var/lib/mysql
+      environment:
+        - MYSQL_USER=drupal
+        - MYSQL_PASSWORD=drupal
+        - MYSQL_DATABASE=drupal
+        - MYSQL_ROOT_PASSWORD=drupal
+
+    #################
+    storage-drupal:
+      build: ./code
+      # container_name: storagedrupal
+      command: ["chmod","-R","777","/var/www/html/sites/default/files"] #v3# create_only: true
+      volumes:
+        - /var/www/html/sites/default
+        - /var/www/html/sites/default/files
+      # volumes_from:
+      #   - storage-code
