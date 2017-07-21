@@ -14,8 +14,9 @@
 	echo your github url $GitUrl
 	echo Your ProjectName is : $ProjectName
 
-	Branch="docker_"
-	GitBranch=$Branch$ProjectName
+	# Branch="live"
+	# GitBranch=$Branch$ProjectName
+	GitBranch="live"
 
 	echo your github Branch must be $GitBranch
 	cd ./code
@@ -27,7 +28,7 @@
 	else
 		cd ../
 		rm ./code -rf
-		git clone $GitUrl ./code
+		git clone -b $GitBranch $GitUrl ./code
 
 	fi;
 

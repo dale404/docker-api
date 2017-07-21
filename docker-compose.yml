@@ -4,6 +4,7 @@ services:
     web:
         image: nginx:latest
         restart: always
+        network_mode: "bridge"
         volumes:
             - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
             #- ./conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
@@ -14,8 +15,8 @@ services:
         links:
             - php
         #work with jwilder/nginx-proxy
-        ports:
-            - "8080:80"
+        # ports:
+        #     - "8080:80"
         environment:
           - VIRTUAL_HOST=api.qq.yongbuzhixi.com
     
@@ -24,6 +25,7 @@ services:
         image: drupal:fpm
         # image: drupal-php7-fpm #给build镜像后的image命名
         restart: always
+        network_mode: "bridge"
         links:
           - "db"
         volumes_from:
@@ -35,6 +37,7 @@ services:
       image: mariadb:latest
       # container_name: mysql #Specify a custom container name, rather than a generated default name.
       restart: always
+      network_mode: "bridge"
       volumes:
         - ./sql:/sql
         - /var/lib/mysql
@@ -47,6 +50,7 @@ services:
     #################
     storage-drupal:
       build: ./code
+      network_mode: "bridge"
       # container_name: storagedrupal
       command: ["chmod","-R","777","/var/www/html/sites/default/files"] #v3# create_only: true
       volumes:
