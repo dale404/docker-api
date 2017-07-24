@@ -40,7 +40,8 @@ services:
       network_mode: "bridge"
       volumes:
         - ./sql:/sql
-        - /var/lib/mysql
+      volumes_from:
+        - storage-drupal
       environment:
         - MYSQL_USER=drupal
         - MYSQL_PASSWORD=drupal
@@ -50,11 +51,21 @@ services:
     #################
     storage-drupal:
       build: ./code
+      # image: drupal:fpm
       network_mode: "bridge"
       # container_name: storagedrupal
-      command: ["chmod","-R","777","/var/www/html/sites/default/files"] #v3# create_only: true
+      command: ["echo","create_only"]
+      # command: ["chmod","-R","777","/var/www/html/sites/default/files"] #v3# create_only: true
+      # volumes:
+      #   - ./code:/code
+        # - /var/www/html/sites/default/files
+      volumes_from:
+        - files-drupal
+    files-drupal:
+      image: drupal:fpm
+      network_mode: "bridge"
+      command: ["chmod","-R","777","/var/www/html/sites/default/files"] #create_only: never update!
       volumes:
+        - /var/lib/mysql
         - /var/www/html/sites/default
         - /var/www/html/sites/default/files
-      # volumes_from:
-      #   - storage-code
