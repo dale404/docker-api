@@ -7,7 +7,7 @@
 	fi
 	if [ -z "$1" ]
 	then
-	     GitUrl="https://github.com/dale404/docker_api.git"
+	     GitUrl="https://github.com/dale404/api.git"
 	else
 		GitUrl=$2
 	fi
@@ -21,6 +21,7 @@
 	echo your github Branch must be $GitBranch
 	cd ./code
 	if [ -d .git ]; then
+		sudo rm index.php
 	  	sudo git checkout .
 	  	sudo git fetch
 	  	sudo git checkout $GitBranch
