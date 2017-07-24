@@ -5,19 +5,21 @@
 	else
 		ProjectName=$1
 	fi
-	if [ -z "$1" ]
+	if [ -z "$2" ]
 	then
 	     GitUrl="https://github.com/dale404/api.git"
 	else
 		GitUrl=$2
 	fi
-	echo your github url $GitUrl
+
+	if [ -z "$3" ]
+	then
+	    GitBranch="master"
+	else
+		GitBranch=$3
+	fi
 	echo Your ProjectName is : $ProjectName
-
-	# Branch="live"
-	# GitBranch=$Branch$ProjectName
-	GitBranch="live"
-
+	echo your github url $GitUrl
 	echo your github Branch must be $GitBranch
 	cd ./code
 	if [ -d .git ]; then
