@@ -18,7 +18,7 @@ services:
         # ports:
         #     - "8080:80"
         environment:
-          - VIRTUAL_HOST=api.qq.yongbuzhixi.com
+          - VIRTUAL_HOST=api.staging.yongbuzhixi.com
     
     #api-code-app > drupal:fpm > php:7-fpm 只执行一次！！！
     php:
