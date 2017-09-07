@@ -23,11 +23,11 @@
 	echo your github Branch must be $GitBranch
 	cd ./code
 	if [ -d .git ]; then
-		sudo rm index.php
-	  	sudo git checkout .
-	  	sudo git fetch
-	  	sudo git checkout $GitBranch
+		sudo git checkout .
+		sudo git fetch
+		sudo git checkout $GitBranch
 		sudo git pull origin $GitBranch
+		cd ../
 	else
 		cd ../
 		rm ./code -rf
@@ -35,7 +35,6 @@
 
 	fi;
 
-	cd ../
 	# sudo chmod 755 -R ./code
 	# sudo chown -R www-data:www-data ./code
 	docker-compose -p $ProjectName -f ./docker-compose.yml up -d  --build --remove-orphans --force-recreate

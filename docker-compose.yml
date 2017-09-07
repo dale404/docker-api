@@ -16,9 +16,9 @@ services:
             - php
         #work with jwilder/nginx-proxy
         # ports:
-        #     - "8080:80"
+        #     - "8080"
         environment:
-          - VIRTUAL_HOST=api.staging.yongbuzhixi.com
+          - VIRTUAL_HOST=api.bce2.yongbuzhixi.com
     
     #api-code-app > drupal:fpm > php:7-fpm 只执行一次！！！
     php:
