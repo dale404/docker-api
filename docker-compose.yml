@@ -19,6 +19,8 @@ services:
         #     - "8080"
         environment:
           - VIRTUAL_HOST=api.bce2.yongbuzhixi.com
+          - LETSENCRYPT_HOST=api.bce2.yongbuzhixi.com
+          - LETSENCRYPT_EMAIL=dale.tel@139.com
     
     #api-code-app > drupal:fpm > php:7-fpm 只执行一次！！！
     php:
