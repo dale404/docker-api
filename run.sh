@@ -34,11 +34,14 @@
 		git clone -b $GitBranch $GitUrl ./code
 	fi;
 	
-	# docker build -t drupal-storage ./code --pull
+	
 	# docker-compose -p api down --remove-orphans
 	# docker-compose -p api -f ./docker-compose.yml up -d  --build --remove-orphans --force-recreate
 	# docker exec -it api_php_1  ls /var/www/html/modules/
-	docker-compose -p $ProjectName down --remove-orphans ##not first time!
+	# docker-compose -p $ProjectName down --remove-orphans ##not first time!
+
+	# //update code because it stop already!!!
+	docker-compose -p $ProjectName  -f ./docker-compose.yml rm -f -v storage-drupal
 	# sudo chmod 755 -R ./code
 	# sudo chown -R www-data:www-data ./code
 	docker-compose -p $ProjectName -f ./docker-compose.yml up -d  --build --remove-orphans --force-recreate
