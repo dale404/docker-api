@@ -52,8 +52,8 @@ services:
 
     #################
     storage-drupal:
-      build: ./code
-      # image: drupal:fpm
+      # build: ./code
+      image: drupal-storage
       network_mode: "bridge"
       # container_name: storagedrupal
       command: ["echo","create_only"]

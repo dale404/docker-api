@@ -32,9 +32,9 @@
 		cd ../
 		rm ./code -rf
 		git clone -b $GitBranch $GitUrl ./code
-
 	fi;
-
+	
+	docker build -t drupal-storage ./code
 	# sudo chmod 755 -R ./code
 	# sudo chown -R www-data:www-data ./code
 	docker-compose -p $ProjectName -f ./docker-compose.yml up -d  --build --remove-orphans --force-recreate
