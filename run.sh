@@ -1,13 +1,13 @@
 	#! /bin/bash
 	if [ -z "$1" ]
 	then
-	     ProjectName="api"
+	     ProjectName="d8_docker_api"
 	else
 		ProjectName=$1
 	fi
 	if [ -z "$2" ]
 	then
-	     GitUrl="https://github.com/dale404/api.git"
+	     GitUrl="https://github.com/guoxiangke/api2017.git"
 	else
 		GitUrl=$2
 	fi
