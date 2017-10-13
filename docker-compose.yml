@@ -3,6 +3,7 @@ version: "2"
 services:
     web:
         image: nginx:latest
+        container_name: api_web
         restart: always
         network_mode: "bridge"
         volumes:
@@ -10,64 +11,35 @@ services:
             #- ./conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
             - ./conf/nginx/drupal.conf:/etc/nginx/conf.d/default.conf
             - ./conf/nginx/amplify.conf:/etc/nginx/conf.d/amplify.conf
-        volumes_from:
-          - storage-drupal
         links:
             - php
-        #work with jwilder/nginx-proxy
-        # ports:
-        #     - "8080"
         environment:
-          - VIRTUAL_HOST=api.bce2.yongbuzhixi.com
-          - LETSENCRYPT_HOST=api.bce2.yongbuzhixi.com
+          - VIRTUAL_HOST=api.staging.yongbuzhixi.com,api.yongbuzhixi.com
+          - LETSENCRYPT_HOST=api.staging.yongbuzhixi.com,api.yongbuzhixi.com
           - LETSENCRYPT_EMAIL=dale.tel@139.com
-    
-    #api-code-app > drupal:fpm > php:7-fpm 只执行一次！！！
-    php:
+    drupal:
         image: drupal:fpm
-        # image: drupal-php7-fpm #给build镜像后的image命名
+        container_name: api_drupal
         restart: always
         network_mode: "bridge"
         links:
           - "db"
-        volumes_from:
-          - storage-drupal
         volumes:
-          - ./conf/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf
-
+          - "./conf/php/log.conf:/usr/local/etc/php-fpm.d/zz-log.conf:ro"
+          - "./code/modules:/var/www/html/modules:ro"
+          - "./code/themes:/var/www/html/themes:ro"
+          - "./code/libraries:/var/www/html/libraries:ro"
+          - "./code/sites/default/files:/var/www/html/sites/default/files:rw"
     db:
       image: mariadb:latest
-      # container_name: mysql #Specify a custom container name, rather than a generated default name.
+      container_name: api_db
       restart: always
       network_mode: "bridge"
       volumes:
-        - ./sql:/sql
-      volumes_from:
-        - storage-drupal
+        - "./sql:/sql:ro"
+        - "./sql/data:/var/lib/mysql"
       environment:
         - MYSQL_USER=drupal
         - MYSQL_PASSWORD=drupal
         - MYSQL_DATABASE=drupal
         - MYSQL_ROOT_PASSWORD=drupal
-
-    #################
-    storage-drupal:
-      build: ./code
-      # image: drupal-storage
-      network_mode: "bridge"
-      # container_name: storagedrupal
-      command: ["echo","create_only"]
-      # command: ["chmod","-R","777","/var/www/html/sites/default/files"] #v3# create_only: true
-      # volumes:
-      #   - ./code:/code
-        # - /var/www/html/sites/default/files
-      volumes_from:
-        - files-drupal
-    files-drupal:
-      image: drupal:fpm
-      network_mode: "bridge"
-      command: ["chmod","-R","777","/var/www/html/sites/default/files"] #create_only: never update!
-      volumes:
-        - /var/lib/mysql
-        - /var/www/html/sites/default
-        - /var/www/html/sites/default/files
